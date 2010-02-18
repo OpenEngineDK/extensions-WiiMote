@@ -1,4 +1,4 @@
-// 
+//
 // -------------------------------------------------------------------
 // Copyright (C) 2007 OpenEngine.dk (See AUTHORS)
 //
@@ -12,14 +12,22 @@
 #define _OE_WII_MOTE_H_
 
 #include <Core/Event.h>
+#include <Devices/Symbols.h>
 
 namespace OpenEngine {
 namespace Devices {
 
+    enum WiiButton {
+        WII_REMOTE_A,
+        WII_REMOTE_B,
+        WII_NONE
+    };
+
     struct WiiButtonEventArg {
-        
-        WiiButtonEventArg() {
-        }
+        ButtonEvent type;
+        WiiButton button;
+
+        WiiButtonEventArg() : type(EVENT_NONE),button(WII_NONE) {}
 
     };
 

@@ -94,7 +94,16 @@ using namespace OpenEngine::Devices;
 - (void) rawIRData: (IRData[4]) irData {}
 - (void) buttonChanged:(WiiButtonType) type 
              isPressed:(BOOL) isPressed {
-    oem->WiiMoteButtonEvent().Notify(WiiButtonEventArg());
+    WiiButtonEventArg arg;
+    arg.type = isPressed?EVENT_PRESS:EVENT_RELEASE;
+    switch (type) {
+    case WiiRemoteAButton: arg.button = WII_REMOTE_A; break;
+    case WiiRemoteBButton: arg.button = WII_REMOTE_B; break;
+    default:
+        break;
+    }
+
+    oem->WiiMoteButtonEvent().Notify(arg);
 }
 - (void) accelerationChanged:(WiiAccelerationSensorType) type accX:(unsigned short) accX accY:(unsigned short) accY accZ:(unsigned short) accZ {}
 - (void) joyStickChanged:(WiiJoyStickType) type tiltX:(unsigned short) tiltX tiltY:(unsigned short) tiltY {}
