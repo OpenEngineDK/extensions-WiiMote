@@ -14,29 +14,50 @@
 #include <Core/Event.h>
 #include <Devices/Symbols.h>
 
+#include <Math/Vector.h>
+
 namespace OpenEngine {
 namespace Devices {
 
+    using Math::Vector;
     enum WiiButton {
         WII_REMOTE_A,
         WII_REMOTE_B,
+        WII_REMOTE_ONE,
+        WII_REMOTE_TWO,
+        WII_REMOTE_MINUS,
+        WII_REMOTE_HOME,
+        WII_REMOTE_PLUS,
+        WII_REMOTE_UP,
+        WII_REMOTE_DOWN,
+        WII_REMOTE_LEFT,
+        WII_REMOTE_RIGHT,
         WII_NONE
     };
 
     struct WiiButtonEventArg {
         ButtonEvent type;
         WiiButton button;
-
         WiiButtonEventArg() : type(EVENT_NONE),button(WII_NONE) {}
+    };
 
+
+
+
+    struct WiiAccelerationEventArg {
+        // source
+        Vector<3,unsigned short> raw;
+        Vector<3,float> acc;
     };
 
 class WiiMote {
 private:
     Core::Event<WiiButtonEventArg> buttonEvent;
+    Core::Event<WiiAccelerationEventArg> accEvent;
 public:
     WiiMote();
     Core::IEvent<WiiButtonEventArg>& WiiMoteButtonEvent() { return buttonEvent;}
+    Core::IEvent<WiiAccelerationEventArg>& WiiMoteAccelerationEvent() { return accEvent;}
 };
 
 } // NS Devices

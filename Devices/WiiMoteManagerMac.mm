@@ -99,13 +99,50 @@ using namespace OpenEngine::Devices;
     switch (type) {
     case WiiRemoteAButton: arg.button = WII_REMOTE_A; break;
     case WiiRemoteBButton: arg.button = WII_REMOTE_B; break;
+    case WiiRemoteOneButton: arg.button = WII_REMOTE_ONE; break;
+    case WiiRemoteTwoButton: arg.button = WII_REMOTE_TWO; break;
+    case WiiRemoteMinusButton: arg.button = WII_REMOTE_MINUS; break;
+    case WiiRemoteHomeButton: arg.button = WII_REMOTE_HOME; break;
+    case WiiRemotePlusButton: arg.button = WII_REMOTE_PLUS; break;
+    case WiiRemoteUpButton: arg.button = WII_REMOTE_UP; break;
+    case WiiRemoteDownButton: arg.button = WII_REMOTE_DOWN; break;
+    case WiiRemoteLeftButton: arg.button = WII_REMOTE_LEFT; break;
+    case WiiRemoteRightButton: arg.button = WII_REMOTE_RIGHT; break;
+    
     default:
         break;
     }
 
     oem->WiiMoteButtonEvent().Notify(arg);
 }
-- (void) accelerationChanged:(WiiAccelerationSensorType) type accX:(unsigned short) accX accY:(unsigned short) accY accZ:(unsigned short) accZ {}
+- (void) accelerationChanged:(WiiAccelerationSensorType)type 
+                        accX:(unsigned short)accX 
+                        accY:(unsigned short)accY 
+                        accZ:(unsigned short)accZ {
+    WiiAccelerationEventArg arg;
+    Vector<3,unsigned short> raw(accX,accY,accZ);
+
+    
+    WiiAccCalibData data = [remote accCalibData:WiiRemoteAccelerationSensor];
+    
+    unsigned short x0,y0,z0,x3,y2,z1;
+    x0 = data.accX_zero;
+    x3 = data.accX_1g;
+    y0 = data.accY_zero;
+    y2 = data.accY_1g;
+    z0 = data.accZ_zero;
+    z1 = data.accZ_1g;
+
+    double ax = (double)(accX - x0) / (x3 - x0);
+    double ay = (double)(accY - y0) / (y2 - y0);
+    double az = (double)(accZ - z0) / (z1 - z0) * (-1.0);
+
+
+    arg.raw = raw;
+    arg.acc = Vector<3,float>(ax,ay,az);
+
+    oem->WiiMoteAccelerationEvent().Notify(arg);
+}
 - (void) joyStickChanged:(WiiJoyStickType) type tiltX:(unsigned short) tiltX tiltY:(unsigned short) tiltY {}
 - (void) analogButtonChanged:(WiiButtonType) type amount:(unsigned short) press {}
 - (void) pressureChanged:(WiiPressureSensorType) type pressureTR:(float) bPressureTR pressureBR:(float) bPressureBR 
