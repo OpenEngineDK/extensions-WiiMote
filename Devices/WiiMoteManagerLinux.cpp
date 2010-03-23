@@ -3,10 +3,12 @@
 #include <Logging/Logger.h>
 #include <wiiuse.h>
 
+
 namespace OpenEngine {
 namespace Devices {
 
 using OpenEngine::Core::ProcessEventArg;
+using namespace std;
 
 WiiMoteManager::WiiMoteManager() {
     logger.info << "implement me wii thingy" << logger.end;    
@@ -27,6 +29,7 @@ void WiiMoteManager::LookForMote() {
 	motes.push_back(mote);
 	foundEvent.Notify(WiiMoteFoundEventArg(mote));
     }
+    Start();
 }
 
 #define CHK_BTN(oen, wiiun)				\
@@ -64,7 +67,19 @@ void CheckButtons(WiiMote* oem, wiimote* mote) {
     
 }
 
+
+
 void WiiMoteManager::Handle(ProcessEventArg arg) {
+    for (vector<WiiMote*>::iterator itr = motes.begin();
+	 itr != motes.end();
+	 itr++) {
+	WiiMote* m = *itr;
+	m->buttonEvent.Release();
+	m->accEvent.Release();
+    }
+}
+void WiiMoteManager::Run() {
+    while (1) {
     while (wiiuse_poll(wiimotes,nmotes)) { // An event have occured!
 	for (int i=0;i<nmotes;i++) {
 	    WiiMote* mote = motes[i];
@@ -77,6 +92,8 @@ void WiiMoteManager::Handle(ProcessEventArg arg) {
 		break;
 	    }
 	}
+    }
+    Sleep(10); // Wait a bit when there is no event
     }
 }
 

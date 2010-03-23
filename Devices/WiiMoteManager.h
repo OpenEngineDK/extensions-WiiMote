@@ -17,6 +17,7 @@
 #ifndef __APPLE__ // We are on linux... ugly hack ;)
 #include <wiiuse.h>
 #include <vector>
+#include <Core/Thread.h>
 #endif
 
 
@@ -36,7 +37,8 @@ public:
  *
  * @class WiiMoteManager WiiMoteManager.h ons/WiiMote/Devices/WiiMoteManager.h
  */
-class WiiMoteManager : public Core::IListener<Core::ProcessEventArg> {
+class WiiMoteManager : public Core::IListener<Core::ProcessEventArg>
+		     , public Core::Thread {
 private:
     Core::Event<WiiMoteFoundEventArg> foundEvent;
 
@@ -49,6 +51,8 @@ private:
 public:
     WiiMoteManager();
     
+    void Run();
+
     void LookForMote();
     virtual void Handle(Core::ProcessEventArg arg);
 

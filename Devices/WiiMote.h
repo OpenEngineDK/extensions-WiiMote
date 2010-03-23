@@ -12,6 +12,9 @@
 #define _OE_WII_MOTE_H_
 
 #include <Core/Event.h>
+#ifndef __APPLE__
+#include <Core/LockedQueuedEvent.h>
+#endif
 #include <Devices/Symbols.h>
 
 #include <Math/Vector.h>
@@ -51,9 +54,15 @@ namespace Devices {
     };
 
 class WiiMote {
-private:
+protected:
+#ifdef __APPLE__
     Core::Event<WiiButtonEventArg> buttonEvent;
     Core::Event<WiiAccelerationEventArg> accEvent;
+#else
+  friend class WiiMoteManager;
+    Core::LockedQueuedEvent<WiiButtonEventArg> buttonEvent;
+    Core::LockedQueuedEvent<WiiAccelerationEventArg> accEvent;    
+#endif
 public:
     WiiMote();
     Core::IEvent<WiiButtonEventArg>& WiiMoteButtonEvent() { return buttonEvent;}
