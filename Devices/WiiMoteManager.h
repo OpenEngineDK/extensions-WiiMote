@@ -38,7 +38,10 @@ public:
  * @class WiiMoteManager WiiMoteManager.h ons/WiiMote/Devices/WiiMoteManager.h
  */
 class WiiMoteManager : public Core::IListener<Core::ProcessEventArg>
-		     , public Core::Thread {
+#ifndef __APPLE__
+                     , public Core::Thread 
+#endif
+{
 private:
     Core::Event<WiiMoteFoundEventArg> foundEvent;
 
