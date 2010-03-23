@@ -162,6 +162,7 @@ WiiManagerMac* macManager;
 namespace OpenEngine {
 namespace Devices {
 
+using OpenEngine::Core::ProcessEventArg;
 
 WiiMoteManager::WiiMoteManager() {
     macManager = [[WiiManagerMac alloc] init];
@@ -172,6 +173,10 @@ WiiMoteManager::WiiMoteManager() {
 void WiiMoteManager::LookForMote() {
     [macManager discover];
 }
+
+ void WiiMoteManager::Handle(ProcessEventArg arg) {
+
+ }
 
 }
 }
