@@ -12,6 +12,13 @@
 #define _OE_WII_MOTE_MANAGER_H_
 
 #include <Core/Event.h>
+#include <Core/EngineEvents.h>
+
+#ifndef __APPLE__ // We are on linux... ugly hack ;)
+#include <wiiuse.h>
+#include <vector>
+#endif
+
 
 namespace OpenEngine {
 namespace Devices {
@@ -29,14 +36,23 @@ public:
  *
  * @class WiiMoteManager WiiMoteManager.h ons/WiiMote/Devices/WiiMoteManager.h
  */
-class WiiMoteManager {
+class WiiMoteManager : public Core::IListener<Core::ProcessEventArg> {
 private:
     Core::Event<WiiMoteFoundEventArg> foundEvent;
+
+#ifndef __APPLE__ // We are on linux... ugly hack ;)
+    wiimote** wiimotes;
+    int nmotes;
+    std::vector<WiiMote*> motes;
+#endif
 
 public:
     WiiMoteManager();
     
     void LookForMote();
+    virtual void Handle(Core::ProcessEventArg arg);
+
+
 
     Core::IEvent<WiiMoteFoundEventArg>& WiiMoteFoundEvent() {
         return foundEvent;
