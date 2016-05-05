@@ -1,7 +1,7 @@
 # WiiMote dependencies
 
 # fetch the wiiuse source code
-dist /dependencies/wiiuse/wiiuse.dist http://openengine.dk/code/dependencies/wiiuse/wiiuse.dist
+dist /dependencies/wiiuse/wiiuse.dist https://raw.githubusercontent.com/OpenEngineDK/dependencies-wiiuse/master/wiiuse.dist
 
 darcs /extensions/WiiMote	http://openengine.dk/code/extensions/WiiMote
 
