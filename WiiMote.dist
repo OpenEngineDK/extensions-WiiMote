@@ -5,4 +5,4 @@ dist /dependencies/wiiuse/wiiuse.dist https://raw.githubusercontent.com/OpenEngi
 
 darcs /extensions/WiiMote	http://openengine.dk/code/extensions/WiiMote
 
-darcs-dev /extensions/WiiMote 	fh.daimi.au.dk:/users/cgd/code/extensions/WiiMote
+git-dev /extensions/WiiMote 	git@github.com:OpenEngineDK/extensions-WiiMote.git
